@@ -47,7 +47,7 @@ public class CardProcessor implements Http.Processor<Document, Card> {
 		String rarity = cardLink.getRarity();
 		String artist = cardLink.getArtist();
 		
-		String bodyText = mainTableRow.getElementsByClass("ctext").first().getElementsByTag("b").html().replaceAll("<br />", "\\\\n");
+		String bodyText = mainTableRow.getElementsByClass("ctext").first().getElementsByTag("b").html().replaceAll("<br />", "\n");
 		
 		return new Card(cardIndex, name, url, imgUrl, typeLine, castingCost, powerToughness, loyalty, rarity, artist, bodyText);
 	}
