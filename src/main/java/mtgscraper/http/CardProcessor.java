@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import mtgscraper.entities.Card;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -47,7 +48,7 @@ public class CardProcessor implements Http.Processor<Document, Card> {
 		String rarity = cardLink.getRarity();
 		String artist = cardLink.getArtist();
 		
-		String bodyText = mainTableRow.getElementsByClass("ctext").first().getElementsByTag("b").html().replaceAll("<br />", "\n");
+		String bodyText = StringEscapeUtils.unescapeHtml4(mainTableRow.getElementsByClass("ctext").first().getElementsByTag("b").html()).replace("<br />", "\n");
 		
 		return new Card(cardIndex, name, url, imgUrl, typeLine, castingCost, powerToughness, loyalty, rarity, artist, bodyText);
 	}
