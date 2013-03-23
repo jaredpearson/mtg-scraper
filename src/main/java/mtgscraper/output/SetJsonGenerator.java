@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import mtgscraper.Visitor;
 import mtgscraper.entities.Card;
@@ -56,7 +57,6 @@ public class SetJsonGenerator {
 	}
 	
 	private static class CardGeneratorVistor implements Visitor<Card> {
-		private static final Logger logger = Logger.getLogger(CardGeneratorVistor.class.getName());
 		private @Nonnull final JsonGenerator generator;
 		
 		public CardGeneratorVistor(@Nonnull final JsonGenerator generator) {
@@ -66,34 +66,36 @@ public class SetJsonGenerator {
 		@Override
 		public void visit(@Nonnull final Card card) {
 			try {
-				
-				generator.writeStartObject();
-				generator.writeStringField("index", card.getIndex());
-				generator.writeStringField("name", card.getName());
-				generator.writeStringField("typeLine", card.getTypeLine());
-				if(card.getBodyText() != null) {
-					generator.writeStringField("body", card.getBodyText());
-				}
-				if(card.getPowerToughness() != null) {
-					generator.writeStringField("powerToughness", card.getPowerToughness());
-				}
-				if(card.getCastingCost() != null) {
-					generator.writeStringField("castingCost", card.getCastingCost());
-				}
-				if(card.getLoyalty() != null) {
-					generator.writeStringField("loyalty", card.getLoyalty());
-				}
-				generator.writeStringField("rarity", card.getRarity());
-				generator.writeStringField("artist", card.getArtist());
-				generator.writeEndObject();
-				generator.flush();
-				logger.fine("Finished " + card.getIndex() + " - " + card.getName());
-				
+				outputCard(generator, card);
 			} catch(JsonGenerationException exc) {
 				throw new RuntimeException(exc);
 			} catch(IOException exc) {
 				throw new RuntimeException(exc);
 			}
+		}
+	}
+	
+	private static void outputCard(@Nonnull final JsonGenerator generator, @Nonnull final Card card)
+			throws JsonGenerationException, IOException {
+		generator.writeStartObject();
+		generator.writeStringField("index", card.getIndex());
+		generator.writeStringField("name", card.getName());
+		generator.writeStringField("typeLine", card.getTypeLine());
+		writeStringFieldIfNotNull(generator, "body", card.getBodyText());
+		writeStringFieldIfNotNull(generator, "powerToughness", card.getPowerToughness());
+		writeStringFieldIfNotNull(generator, "castingCost", card.getCastingCost());
+		writeStringFieldIfNotNull(generator, "loyalty", card.getLoyalty());
+		generator.writeStringField("rarity", card.getRarity());
+		generator.writeStringField("artist", card.getArtist());
+		generator.writeEndObject();
+		generator.flush();
+		logger.fine("Finished " + card.getIndex() + " - " + card.getName());
+	}
+	
+	private static void writeStringFieldIfNotNull(@Nonnull final JsonGenerator generator, @Nonnull final String fieldName, 
+			@Nullable final String value) throws JsonGenerationException, IOException {
+		if(value != null) {
+			generator.writeStringField(fieldName, value);
 		}
 	}
 }
