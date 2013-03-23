@@ -18,7 +18,9 @@ public class HttpTestUtils {
 			inputStream = CardProcessorTest.class.getResourceAsStream(path);
 			return Jsoup.parse(inputStream, "utf-8", "http://magiccards.info/");
 		} finally {
-			inputStream.close();
+			if(inputStream != null) {
+				inputStream.close();
+			}
 		}
 	}
 }

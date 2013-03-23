@@ -64,11 +64,11 @@ public class CardDownloadManager {
 			this.downloaded = new Object[numberOfItems];
 		}
 		
-		public void setOnDownloaded(Visitor<T> visitor) {
+		public synchronized void setOnDownloaded(Visitor<T> visitor) {
 			this.onDownloadedVisitor = visitor;
 		}
 		
-		public void setOnListFinished(Visitor<List<T>> finished) {
+		public synchronized void setOnListFinished(Visitor<List<T>> finished) {
 			this.onFinished = finished;
 		}
 		

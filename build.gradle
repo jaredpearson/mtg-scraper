@@ -1,7 +1,11 @@
 apply plugin: 'eclipse'
 apply plugin: 'java'
+apply plugin: 'findbugs'
 
-sourceCompatibility = '1.7'
+sourceCompatibility = '1.6'
+
+//configure UTF-8 processing
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 repositories {
 	mavenCentral()
@@ -15,4 +19,11 @@ dependencies {
 	
     testCompile 'junit:junit:4.+'
     testCompile 'org.mockito:mockito-core:1.8.0'
+}
+
+tasks.withType(FindBugs) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
 }
