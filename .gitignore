@@ -11,3 +11,6 @@
 
 #gradle junk
 /.gradle
+
+#clover
+/.clover
