@@ -1,23 +1,25 @@
 package mtgscraper.entities;
 
+import javax.annotation.Nonnull;
+
 public class Block {
-	private CardSetProvider cardSetProvider;
-	private String name;
+	private @Nonnull final CardSetProvider cardSetProvider;
+	private @Nonnull final String name;
 	
-	public Block(String name, CardSetProvider cardSetProvider) {
+	public Block(@Nonnull final String name, @Nonnull final CardSetProvider cardSetProvider) {
 		this.name = name;
 		this.cardSetProvider = cardSetProvider;
 	}
 	
-	public String getName() {
+	public @Nonnull String getName() {
 		return name;
 	}
 	
-	public CardSet getSetByAbbr(String abbreviation) {
+	public @Nonnull CardSet getSetByAbbr(@Nonnull String abbreviation) {
 		return cardSetProvider.getCardSetByAbbr(abbreviation);
 	}
 	
 	public interface CardSetProvider {
-		public CardSet getCardSetByAbbr(String abbreviation);
+		public @Nonnull CardSet getCardSetByAbbr(@Nonnull String abbreviation);
 	}
 }

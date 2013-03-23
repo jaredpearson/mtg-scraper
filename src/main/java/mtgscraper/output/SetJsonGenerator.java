@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
+
 import mtgscraper.Visitor;
 import mtgscraper.entities.Card;
 import mtgscraper.entities.CardSet;
@@ -20,7 +22,7 @@ public class SetJsonGenerator {
 	/**
 	 * Saves the to the specified file
 	 */
-	public void saveSet(CardSet set, File outputFile) throws IOException {
+	public void saveSet(@Nonnull final CardSet set, @Nonnull final File outputFile) throws IOException {
 		FileOutputStream fileOutStream = null;
 		try {
 			fileOutStream = new FileOutputStream(outputFile);
@@ -32,7 +34,7 @@ public class SetJsonGenerator {
 		}
 	}
 	
-	public void saveSet(CardSet set, OutputStream outputStream) throws IOException {
+	public void saveSet(@Nonnull final CardSet set, @Nonnull final OutputStream outputStream) throws IOException {
 		logger.fine("Saving set index for " + set.getName());
 		JsonFactory jsonFactory = new JsonFactory();
 		
@@ -55,14 +57,14 @@ public class SetJsonGenerator {
 	
 	private static class CardGeneratorVistor implements Visitor<Card> {
 		private static final Logger logger = Logger.getLogger(CardGeneratorVistor.class.getName());
-		private JsonGenerator generator;
+		private @Nonnull final JsonGenerator generator;
 		
-		public CardGeneratorVistor(JsonGenerator generator) {
+		public CardGeneratorVistor(@Nonnull final JsonGenerator generator) {
 			this.generator = generator;
 		}
 		
 		@Override
-		public void visit(Card card) {
+		public void visit(@Nonnull final Card card) {
 			try {
 				
 				generator.writeStartObject();

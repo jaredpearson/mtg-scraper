@@ -1,15 +1,20 @@
 package mtgscraper.http;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class CardLink {
-	private String url;
-	private String typeLine;
-	private String powerToughness;
-	private String loyalty;
-	private String castingCost;
-	private String rarity;
-	private String artist;
+	private @Nonnull final String url;
+	private final String typeLine;
+	private final String powerToughness;
+	private final String loyalty;
+	private final String castingCost;
+	private final String rarity;
+	private final String artist;
 	
-	public CardLink(String url, String typeLine, String powerToughness, String loyalty, String castingCost, String rarity, String artist) {
+	public CardLink(@Nonnull final String url, @Nullable final String typeLine, @Nullable final String powerToughness, 
+			@Nullable final String loyalty, @Nullable final String castingCost, @Nullable final String rarity, 
+			@Nullable final String artist) {
 		this.url = url;
 		this.typeLine = typeLine;
 		this.powerToughness = powerToughness;
@@ -19,31 +24,31 @@ public class CardLink {
 		this.artist = artist;
 	}
 	
-	public String getUrl() {
+	public @Nonnull String getUrl() {
 		return url;
 	}
 	
-	public String getTypeLine() {
+	public @Nullable String getTypeLine() {
 		return typeLine;
 	}
 	
-	public String getPowerToughness() {
+	public @Nullable String getPowerToughness() {
 		return powerToughness;
 	}
 	
-	public String getLoyalty() {
+	public @Nullable String getLoyalty() {
 		return loyalty;
 	}
 	
-	public String getRarity() {
+	public @Nullable String getRarity() {
 		return rarity;
 	}
 	
-	public String getCastingCost() {
+	public @Nullable String getCastingCost() {
 		return castingCost;
 	}
 	
-	public String getArtist() {
+	public @Nullable String getArtist() {
 		return artist;
 	}
 }

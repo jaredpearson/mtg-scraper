@@ -3,6 +3,9 @@ package mtgscraper.http;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import mtgscraper.entities.CardSet;
 
 import org.jsoup.nodes.Document;
@@ -10,14 +13,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class CardSetProcessor implements Http.Processor<Document, CardSet> {
-	private HttpCardProviderFactory cardProviderFactory;
+	private @Nonnull final HttpCardProviderFactory cardProviderFactory;
 	
-	public CardSetProcessor(HttpCardProviderFactory cardProviderFactory) {
+	public CardSetProcessor(@Nonnull final HttpCardProviderFactory cardProviderFactory) {
 		this.cardProviderFactory = cardProviderFactory;
 	}
 	
 	@Override
-	public CardSet process(Document document) throws IOException {
+	public @Nonnull CardSet process(@Nonnull final Document document) throws IOException {
 		Element header = document.getElementsByTag("h1").first();
 		String setName = header.ownText(); 
 		
@@ -70,7 +73,7 @@ public class CardSetProcessor implements Http.Processor<Document, CardSet> {
 		return cardSet;
 	}
 	
-	private static String trimToNull(String value) {
+	private static @Nullable String trimToNull(@Nullable String value) {
 		if(value == null) {
 			return null;
 		}

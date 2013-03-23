@@ -3,25 +3,28 @@ package mtgscraper.entities;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 public class Category {
-	private String name;
-	private List<Block> blocks = null;
+	private final String name;
+	private final List<Block> blocks;
 	
-	public Category(String name, List<Block> blocks) {
+	public Category(@Nullable final String name, @Nonnull final List<Block> blocks) {
 		this.name = name;
 		this.blocks = blocks;
 	}
 	
-	public String getName() {
+	public @Nullable String getName() {
 		return name;
 	}
 	
-	public List<Block> getBlocks() {
+	public @Nonnull List<Block> getBlocks() {
 		return blocks;
 	}
 	
-	public CardSet getSetByAbbr(String abbreviation) {
+	public @Nonnull CardSet getSetByAbbr(@Nonnull String abbreviation) {
 		for(Block block : blocks) {
 			try {
 				return block.getSetByAbbr(abbreviation);

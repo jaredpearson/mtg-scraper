@@ -1,19 +1,24 @@
 package mtgscraper.entities;
 
+import javax.annotation.Nullable;
+
 public class Card {
-	private String index;
-	private String name;
-	private String url;
-	private String imageUrl;
-	private String typeLine;
-	private String castingCost;
-	private String powerToughness;
-	private String loyalty;
-	private String rarity;
-	private String artist;
-	private String bodyText;
+	private @Nullable final String index;
+	private @Nullable final String name;
+	private @Nullable final String url;
+	private @Nullable final String imageUrl;
+	private @Nullable final String typeLine;
+	private @Nullable final String castingCost;
+	private @Nullable final String powerToughness;
+	private @Nullable final String loyalty;
+	private @Nullable final String rarity;
+	private @Nullable final String artist;
+	private @Nullable final String bodyText;
 	
-	public Card(String index, String name, String url, String imageUrl, String typeLine, String castingCost, String powerToughness, String loyalty, String rarity, String artist, String bodyText) {
+	public Card(@Nullable final String index, @Nullable final String name, @Nullable final String url, 
+			@Nullable final String imageUrl, @Nullable final String typeLine, @Nullable final String castingCost, 
+			@Nullable final String powerToughness, @Nullable final String loyalty, @Nullable final String rarity, 
+			@Nullable final String artist, @Nullable final String bodyText) {
 		this.index = index;
 		this.name = name;
 		this.url = url;
@@ -27,47 +32,47 @@ public class Card {
 		this.bodyText = bodyText;
 	}
 	
-	public String getIndex() {
+	public @Nullable String getIndex() {
 		return index;
 	}
 	
-	public String getName() {
+	public @Nullable String getName() {
 		return name;
 	}
 	
-	public String getUrl() {
+	public @Nullable String getUrl() {
 		return url;
 	}
 	
-	public String getImageUrl() {
+	public @Nullable String getImageUrl() {
 		return imageUrl;
 	}
 	
-	public String getTypeLine() {
+	public @Nullable String getTypeLine() {
 		return typeLine;
 	}
 	
-	public String getCastingCost() {
+	public @Nullable String getCastingCost() {
 		return castingCost;
 	}
 	
-	public String getPowerToughness() {
+	public @Nullable String getPowerToughness() {
 		return powerToughness;
 	}
 	
-	public String getLoyalty() {
+	public @Nullable String getLoyalty() {
 		return loyalty;
 	}
 	
-	public String getRarity() {
+	public @Nullable String getRarity() {
 		return rarity;
 	}
 	
-	public String getArtist() {
+	public @Nullable String getArtist() {
 		return artist;
 	}
 	
-	public String getBodyText() {
+	public @Nullable String getBodyText() {
 		return bodyText;
 	}
 }

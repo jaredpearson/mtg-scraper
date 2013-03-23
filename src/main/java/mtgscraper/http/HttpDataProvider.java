@@ -2,6 +2,8 @@ package mtgscraper.http;
 
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
+
 import mtgscraper.DataProvider;
 import mtgscraper.entities.Catalog;
 
@@ -11,9 +13,9 @@ import mtgscraper.entities.Catalog;
  */
 public class HttpDataProvider implements DataProvider {
 	private final Logger logger = Logger.getLogger(HttpDataProvider.class.getName());
-	private Http http;
-	private CardDownloadManager cardDownloadManager;
-	private SiteMapProcessor siteMapProcessor;
+	private @Nonnull final Http http;
+	private @Nonnull final CardDownloadManager cardDownloadManager;
+	private @Nonnull final SiteMapProcessor siteMapProcessor;
 	
 	public HttpDataProvider() {
 		this.http = new Http("http://magiccards.info");
@@ -29,7 +31,7 @@ public class HttpDataProvider implements DataProvider {
 	 * Requests the catalog from the provider.
 	 */
 	@Override
-	public Catalog requestCatalog() throws Exception {
+	public @Nonnull Catalog requestCatalog() throws Exception {
 		logger.fine("Downloading catalog");
 		return http.requestDocument("/sitemap.html", siteMapProcessor);
 	}

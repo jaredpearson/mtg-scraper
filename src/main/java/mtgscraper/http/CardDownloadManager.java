@@ -7,6 +7,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jsoup.nodes.Document;
 
 import mtgscraper.Visitor;
@@ -17,7 +20,7 @@ public class CardDownloadManager {
 	private final ThreadPoolExecutor threadPool;
 	private final Http http;
 	
-	public CardDownloadManager(Http http) {
+	public CardDownloadManager(@Nonnull final Http http) {
 		this.threadPool = new ThreadPoolExecutor(5, 10, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 		this.http = http;
 	}
@@ -27,16 +30,17 @@ public class CardDownloadManager {
 	 * card within the set. The order the visitor is invoked is guaranteed to be in
 	 * the order in the set.
 	 */
-	public void requestCards(List<CardLink> cardLinks, Visitor<Card> cardVisitor, Visitor<List<Card>> finished) {
+	public void requestCards(@Nonnull final List<CardLink> cardLinks, @Nonnull final Visitor<Card> cardVisitor, 
+			@Nonnull final Visitor<List<Card>> finished) {
 		//copy the array so it can't change during the request
-		cardLinks = new ArrayList<CardLink>(cardLinks);
+		ArrayList<CardLink> cardLinksCopy = new ArrayList<CardLink>(cardLinks);
 		
-		ListDownloadContext<Card> handler = new ListDownloadContext<Card>(cardLinks.size());
+		ListDownloadContext<Card> handler = new ListDownloadContext<Card>(cardLinksCopy.size());
 		handler.setOnDownloaded(cardVisitor);
 		handler.setOnListFinished(finished);
 		
-		for(int cardIndex = 0; cardIndex < cardLinks.size(); cardIndex++) {
-			CardLink cardLink = cardLinks.get(cardIndex);
+		for(int cardIndex = 0; cardIndex < cardLinksCopy.size(); cardIndex++) {
+			CardLink cardLink = cardLinksCopy.get(cardIndex);
 			threadPool.execute(new DownloadAction<Card>(handler, cardIndex, cardLink.getUrl(), new CardProcessor(cardLink)));
 		}
 	}
@@ -56,31 +60,31 @@ public class CardDownloadManager {
 	private static class ListDownloadContext<T> {
 		private Object[] downloaded;
 		private int lastNotified = -1;
-		private Visitor<T> onDownloadedVisitor;
-		private Visitor<List<T>> onFinished;
+		private @Nullable Visitor<T> onDownloadedVisitor;
+		private @Nullable Visitor<List<T>> onFinished;
 		
 		public ListDownloadContext(int numberOfItems) {
 			//initialize the array to hold the downloaded cards
 			this.downloaded = new Object[numberOfItems];
 		}
 		
-		public synchronized void setOnDownloaded(Visitor<T> visitor) {
+		public synchronized void setOnDownloaded(@Nullable final Visitor<T> visitor) {
 			this.onDownloadedVisitor = visitor;
 		}
 		
-		public synchronized void setOnListFinished(Visitor<List<T>> finished) {
+		public synchronized void setOnListFinished(@Nullable final Visitor<List<T>> finished) {
 			this.onFinished = finished;
 		}
 		
 		/**
 		 * Each thread will invoke the finished method.
 		 */
-		public synchronized void finished(final int index, final T card) {
+		public synchronized void finished(final int index, @Nonnull final T card) {
 			downloaded[index] = card;
 			notifyVisitors();
 		}
 		
-		public void onError(int index, String url) {
+		public void onError(int index, @Nonnull final String url) {
 			System.err.println("Error downloading card from URL: " + url);
 		}
 		
@@ -129,7 +133,8 @@ public class CardDownloadManager {
 		private Processor<Document, T> responseProcessor;
 		private final ListDownloadContext<T> context;
 		
-		private DownloadAction(ListDownloadContext<T> context, int urlIndex, String url, Processor<Document, T> responseProcessor) {
+		private DownloadAction(@Nonnull final ListDownloadContext<T> context, int urlIndex, 
+				@Nonnull final String url, @Nonnull final Processor<Document, T> responseProcessor) {
 			this.urlIndex = urlIndex;
 			this.url = url;
 			this.responseProcessor = responseProcessor;

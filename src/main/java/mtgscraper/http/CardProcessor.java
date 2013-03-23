@@ -2,6 +2,8 @@ package mtgscraper.http;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import mtgscraper.entities.Card;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -10,14 +12,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class CardProcessor implements Http.Processor<Document, Card> {
-	private CardLink cardLink;
+	private @Nonnull final CardLink cardLink;
 	
-	public CardProcessor(CardLink cardLink) {
+	public CardProcessor(@Nonnull final CardLink cardLink) {
 		this.cardLink = cardLink;
 	}
 	
 	@Override
-	public Card process(Document document) throws IOException {
+	public @Nonnull Card process(@Nonnull Document document) throws IOException {
 		
 		Element mainTable = document.getElementsByTag("table").get(3);
 		Element mainTableRow = mainTable.getElementsByTag("tr").first();

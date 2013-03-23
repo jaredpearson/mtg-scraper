@@ -5,27 +5,30 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 public class Language {
-	private String name;
-	private String abbr;
-	private List<Category> categories = null;
+	private @Nullable final String name;
+	private @Nullable final String abbr;
+	private @Nonnull final List<Category> categories;
 	
-	public Language(String name, String abbr, List<Category> categories) {
+	public Language(@Nullable final String name, @Nullable final String abbr, @Nonnull final List<Category> categories) {
 		this.name = name;
 		this.abbr = abbr;
 		this.categories = categories;
 	}
 	
-	public String getName() {
+	public @Nullable String getName() {
 		return name;
 	}
 	
-	public String getAbbr() {
+	public @Nullable String getAbbr() {
 		return abbr;
 	}
 	
-	public CardSet getSetByAbbr(String abbreviation) {
+	public @Nonnull CardSet getSetByAbbr(@Nonnull String abbreviation) {
 		for(Category category : categories) {
 			try {
 				return category.getSetByAbbr(abbreviation);
@@ -36,7 +39,7 @@ public class Language {
 		throw new NoSuchElementException("No set found with abbreviation of " + abbreviation);
 	}
 	
-	public List<Block> getBlocks() {
+	public @Nonnull List<Block> getBlocks() {
 		ArrayList<Block> blocks = new ArrayList<Block>();
 		for(Category category : categories) {
 			blocks.addAll(category.getBlocks());

@@ -3,6 +3,8 @@ package mtgscraper.http;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.annotation.Nonnull;
+
 import mtgscraper.entities.Block;
 import mtgscraper.entities.Catalog;
 import mtgscraper.entities.Category;
@@ -18,14 +20,14 @@ import org.jsoup.select.Elements;
  * @author jared.pearson
  */
 public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
-	private HttpCardSetProviderFactory cardSetProviderFactory;
+	private @Nonnull final HttpCardSetProviderFactory cardSetProviderFactory;
 	
-	public SiteMapProcessor(HttpCardSetProviderFactory cardSetProviderFactory) {
+	public SiteMapProcessor(@Nonnull final HttpCardSetProviderFactory cardSetProviderFactory) {
 		this.cardSetProviderFactory = cardSetProviderFactory;
 	}
 	
 	@Override
-	public Catalog process(Document document) throws IOException {
+	public @Nonnull Catalog process(@Nonnull final Document document) throws IOException {
 		ArrayList<Language> languages = new ArrayList<Language>();
 		Elements languageElements = document.getElementsByTag("h2");
 		for(Element languageElement : languageElements) {
@@ -49,7 +51,7 @@ public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
 						String setName = setElement.getElementsByTag("a").get(0).ownText();
 						String setUrl = setElement.getElementsByTag("a").attr("href");
 						String setAbbr = setElement.getElementsByTag("small").first().ownText().toUpperCase();
-						sets.add(new CardSetLink(setName, setAbbr, setUrl));
+						sets.add(new CardSetLink(setUrl, setName, setAbbr));
 					}
 					sets.trimToSize();
 					

@@ -2,6 +2,8 @@ package mtgscraper;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -15,7 +17,7 @@ import mtgscraper.output.SetJsonGenerator;
 
 public class App {
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(@Nonnull final String[] args) throws Exception {
 		Options options = new Options();
 		options.addOption("l", "language", true, "the language of the set to download. default is en");
 		options.addOption("o", "output", true, "the directory to output the downloaded files to.");
@@ -52,11 +54,12 @@ public class App {
 		new App().saveSets(languageCode, setCodes, rootDir);
 	}
 	
-	private static void printHelp(Options options) {
+	private static void printHelp(@Nonnull final Options options) {
 		(new HelpFormatter()).printHelp(App.class.getName() + " <set>... [option]", options);
 	}
 	
-	public void saveSets(String languageCode, String[] setCodes, File rootDir) throws Exception {
+	public void saveSets(@Nonnull final String languageCode, @Nonnull final String[] setCodes, 
+			@Nonnull final File rootDir) throws Exception {
 		HttpDataProvider dataProvider = null;
 		try {
 			dataProvider = new HttpDataProvider();

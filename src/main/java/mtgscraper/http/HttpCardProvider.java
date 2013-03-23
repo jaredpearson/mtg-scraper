@@ -2,16 +2,19 @@ package mtgscraper.http;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import mtgscraper.Visitor;
 import mtgscraper.entities.Card;
 import mtgscraper.entities.CardSet;
 
 public class HttpCardProvider implements CardSet.CardProvider {
-	private List<CardLink> cardLinks;
-	private CardDownloadManager cardDownloadManager;
-	private List<Card> cards;
+	private @Nonnull final List<CardLink> cardLinks;
+	private @Nonnull final CardDownloadManager cardDownloadManager;
+	private @Nullable List<Card> cards;
 	
-	public HttpCardProvider(CardDownloadManager cardDownloadManager, List<CardLink> cardLinks) {
+	public HttpCardProvider(@Nonnull final CardDownloadManager cardDownloadManager, @Nonnull final List<CardLink> cardLinks) {
 		this.cardDownloadManager = cardDownloadManager;
 		this.cardLinks = cardLinks;
 	}
@@ -36,7 +39,7 @@ public class HttpCardProvider implements CardSet.CardProvider {
 	 * Downloads the cards using the download manager.
 	 * @param visitor
 	 */
-	private void requestCards(final Visitor<Card> visitor) {
+	private void requestCards(@Nonnull final Visitor<Card> visitor) {
 		
 		Visitor<List<Card>> finished = new Visitor<List<Card>>() {
 			@Override
