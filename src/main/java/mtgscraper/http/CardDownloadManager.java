@@ -58,22 +58,33 @@ public class CardDownloadManager {
 	}
 	
 	private static class ListDownloadContext<T> {
+		private static final Visitor<?> VISITOR_NOOP = new Visitor<Object>() {
+			public void visit(Object value) {}
+		};
 		private Object[] downloaded;
 		private int lastNotified = -1;
-		private @Nullable Visitor<T> onDownloadedVisitor;
-		private @Nullable Visitor<List<T>> onFinished;
+		
+		@SuppressWarnings("unchecked")
+		private @Nullable Visitor<T> onDownloadedVisitor = (Visitor<T>)VISITOR_NOOP;
+		
+		@SuppressWarnings("unchecked")
+		private @Nullable Visitor<List<T>> onFinished = (Visitor<List<T>>)VISITOR_NOOP;
 		
 		public ListDownloadContext(int numberOfItems) {
 			//initialize the array to hold the downloaded cards
 			this.downloaded = new Object[numberOfItems];
 		}
 		
-		public synchronized void setOnDownloaded(@Nullable final Visitor<T> visitor) {
+		public synchronized void setOnDownloaded(@Nonnull final Visitor<T> visitor) {
 			this.onDownloadedVisitor = visitor;
 		}
 		
-		public synchronized void setOnListFinished(@Nullable final Visitor<List<T>> finished) {
+		public synchronized void setOnListFinished(@Nonnull final Visitor<List<T>> finished) {
 			this.onFinished = finished;
+		}
+		
+		public synchronized boolean isFinished() {
+			return lastNotified + 1 == downloaded.length;
 		}
 		
 		/**
@@ -95,17 +106,12 @@ public class CardDownloadManager {
 		 */
 		@SuppressWarnings("unchecked")
 		private synchronized void notifyVisitors() {
-			if(lastNotified + 1 == downloaded.length) {
-				//notify the finished visitor that we have finished
-				if(onFinished != null) {
-					ArrayList<T> list = new ArrayList<T>();
-					for(Object item : this.downloaded) {
-						list.add((T) item);
-					}
-					onFinished.visit(list);
-				}
+			//notify the finished visitor that we have finished
+			if(isFinished()) {
+				notifyOnFinished();
 				return;
 			}
+			
 			if(downloaded[lastNotified + 1] == null) {
 				//since the card is not download yet, there is no one to notify
 				return;
@@ -114,12 +120,27 @@ public class CardDownloadManager {
 			//notify the card visitor that the next card is available
 			lastNotified += 1;
 			T card = (T)downloaded[lastNotified];
-			if(onDownloadedVisitor != null) {
-				onDownloadedVisitor.visit(card);
-			}
+			onDownloadedVisitor.visit(card);
 			
 			//run notify again to check the next card is finished
 			notifyVisitors();
+		}
+
+		private synchronized void notifyOnFinished() {
+			if(!isFinished()) {
+				return;
+			}
+			List<T> list = downloadedAsList();
+			onFinished.visit(list);
+		}
+
+		@SuppressWarnings("unchecked")
+		private @Nonnull List<T> downloadedAsList() {
+			ArrayList<T> list = new ArrayList<T>();
+			for(Object item : this.downloaded) {
+				list.add((T) item);
+			}
+			return list;
 		}
 	}
 	
