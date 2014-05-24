@@ -31,6 +31,9 @@ public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
 		ArrayList<Language> languages = new ArrayList<Language>();
 		Elements languageElements = document.getElementsByTag("h2");
 		for(Element languageElement : languageElements) {
+
+			final String languageName = languageElement.ownText();
+			final String languageAbbr = languageElement.getElementsByTag("small").first().ownText().toLowerCase();
 			
 			ArrayList<Category> categories = new ArrayList<Category>();
 			Elements categoryElements = languageElement.nextElementSibling().getElementsByTag("h3");
@@ -40,7 +43,7 @@ public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
 				Elements blockElements = categoryElement.nextElementSibling().children();
 				for(Element blockElement : blockElements) {
 
-					ArrayList<CardSetLink> sets = new ArrayList<CardSetLink>();
+					ArrayList<HttpCardSetReference> sets = new ArrayList<HttpCardSetReference>();
 					Elements setElements = blockElement.getElementsByTag("li");
 					for(Element setElement : setElements) {
 						//skip the self element
@@ -51,12 +54,12 @@ public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
 						String setName = setElement.getElementsByTag("a").get(0).ownText();
 						String setUrl = setElement.getElementsByTag("a").attr("href");
 						String setAbbr = setElement.getElementsByTag("small").first().ownText().toUpperCase();
-						sets.add(new CardSetLink(setUrl, setName, setAbbr));
+						sets.add(new HttpCardSetReference(setUrl, setName, setAbbr, languageAbbr, cardSetProviderFactory.create()));
 					}
 					sets.trimToSize();
 					
 					String blockName = blockElement.ownText();
-					blocks.add(new Block(blockName, cardSetProviderFactory.getForSets(sets)));
+					blocks.add(new Block(blockName, sets));
 				}
 				blocks.trimToSize();
 				
@@ -65,9 +68,6 @@ public class SiteMapProcessor implements Http.Processor<Document, Catalog> {
 				categories.add(new Category(categoryName, blocks));
 			}
 			categories.trimToSize();
-
-			String languageName = languageElement.ownText();
-			String languageAbbr = languageElement.getElementsByTag("small").first().ownText().toLowerCase();
 			
 			languages.add(new Language(languageName, languageAbbr, categories));
 		}

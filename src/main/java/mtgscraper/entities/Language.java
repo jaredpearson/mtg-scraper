@@ -8,7 +8,10 @@ import java.util.NoSuchElementException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
+/**
+ * The language in which the cards are printed.
+ * @author jared.pearson
+ */
 public class Language {
 	private @Nullable final String name;
 	private @Nullable final String abbr;
@@ -20,18 +23,24 @@ public class Language {
 		this.categories = categories;
 	}
 	
+	/**
+	 * Gets the human readable name for the language
+	 */
 	public @Nullable String getName() {
 		return name;
 	}
 	
+	/**
+	 * Gets the 2-char abbreviation for the language
+	 */
 	public @Nullable String getAbbr() {
 		return abbr;
 	}
 	
-	public @Nonnull CardSet getSetByAbbr(@Nonnull String abbreviation) {
+	public @Nonnull CardSetReference getSetReferenceByAbbr(@Nonnull String abbreviation) {
 		for(Category category : categories) {
 			try {
-				return category.getSetByAbbr(abbreviation);
+				return category.getSetReferenceByAbbr(abbreviation);
 			} catch(NoSuchElementException exc) {
 				
 			}

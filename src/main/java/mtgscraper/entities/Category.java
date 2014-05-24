@@ -24,10 +24,10 @@ public class Category {
 		return blocks;
 	}
 	
-	public @Nonnull CardSet getSetByAbbr(@Nonnull String abbreviation) {
+	public @Nonnull CardSetReference getSetReferenceByAbbr(@Nonnull String abbreviation) {
 		for(Block block : blocks) {
 			try {
-				return block.getSetByAbbr(abbreviation);
+				return block.getSetReferenceByAbbr(abbreviation);
 			} catch(NoSuchElementException exc) {
 				
 			}

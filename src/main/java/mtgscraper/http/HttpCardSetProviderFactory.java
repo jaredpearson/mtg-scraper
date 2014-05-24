@@ -1,10 +1,12 @@
 package mtgscraper.http;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
-public class HttpCardSetProviderFactory {
+/**
+ * Factory for creating card set providers
+ * @author jared.pearson
+ */
+class HttpCardSetProviderFactory {
 	private @Nonnull final Http http;
 	private @Nonnull final CardSetProcessor cardSetProcessor;
 	
@@ -14,9 +16,9 @@ public class HttpCardSetProviderFactory {
 	}
 	
 	/**
-	 * Creates a new HTTP CardSet provider for the given card sets.
+	 * Creates a new HTTP CardSet provider.
 	 */
-	public @Nonnull HttpCardSetProvider getForSets(@Nonnull List<CardSetLink> sets) {
-		return new HttpCardSetProvider(http, cardSetProcessor, sets);
+	public @Nonnull HttpCardSetProvider create() {
+		return new HttpCardSetProvider(http, cardSetProcessor);
 	}
 }

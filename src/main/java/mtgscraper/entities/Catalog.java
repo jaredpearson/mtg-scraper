@@ -24,9 +24,9 @@ public class Catalog {
 		throw new NoSuchElementException("No language found with abbreviation of " + abbreviation);
 	}
 	
-	public @Nonnull CardSet getSetByAbbr(@Nullable final String languageAbbreviation, @Nonnull final String setAbbreviation) {
+	public @Nonnull CardSetReference getSetReferenceByAbbr(@Nullable final String languageAbbreviation, @Nonnull final String setAbbreviation) {
 		Language language = getLanguageByAbbr(languageAbbreviation);
-		return language.getSetByAbbr(setAbbreviation);
+		return language.getSetReferenceByAbbr(setAbbreviation);
 	}
 	
 	public @Nonnull List<Language> getLanguages() {

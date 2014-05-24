@@ -12,15 +12,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * After a card set document is retrieved, this processor converts the value retrieved
+ * into the {@link CardSet} object. 
+ * @author jared.pearson
+ */
 public class CardSetProcessor implements Http.Processor<Document, CardSet> {
 	private @Nonnull final HttpCardProviderFactory cardProviderFactory;
 	
 	public CardSetProcessor(@Nonnull final HttpCardProviderFactory cardProviderFactory) {
+		assert cardProviderFactory != null;
 		this.cardProviderFactory = cardProviderFactory;
 	}
 	
 	@Override
 	public @Nonnull CardSet process(@Nonnull final Document document) throws IOException {
+		assert document != null;
 		Element header = document.getElementsByTag("h1").first();
 		String setName = header.ownText(); 
 		
